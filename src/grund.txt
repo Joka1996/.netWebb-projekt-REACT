@@ -1,0 +1,58 @@
+import React, { Component } from "react";
+
+export class Home extends Component {
+  render() {
+    return (
+      <div>
+        <h3>HomePage</h3>
+      </div>
+    );
+  }
+}
+
+
+
+  //constructor
+  constructor(props) {
+    super(props);
+    //tom array för innehåll
+    this.state = {
+      categories: [],
+    };
+  }
+  //hämta kategorier
+  refreshList() {
+    fetch(EndPoints.API_URL + "Categories")
+      .then((response) => response.json())
+      .then((data) => {
+        //kategoriena placeras i arrayen
+        this.setState({ categories: data });
+      });
+  }
+  componentDidMount() {
+    this.refreshList();
+  }
+
+
+
+
+
+            {categoryId === 0 ? (
+                  <button
+                    type="button"
+                    className="btn btn-primary float-start"
+                    onClick={() => this.createClick()}
+                  >
+                    Skapa
+                  </button>
+                ) : null}
+
+                {categoryId !== 0 ? (
+                  <button
+                    type="button"
+                    className="btn btn-primary float-start"
+                    onClick={() => this.updateClick()}
+                  >
+                    Uppdatera
+                  </button>
+                ) : null}
