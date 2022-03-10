@@ -5,15 +5,21 @@ import { EndPoints } from "./EndPoints";
 //useParams(hooks) fungerar ej med class, så får bli en funktion
 function DetailPage() {
   const { book_id } = useParams();
-
+  //ska skrivas ut med state
+  const [book, setBooks] = useState({});
+  const [admin, setAdmin] = useState();
   //console.log(book_id);
   //kör på funktionen
   useEffect(() => {
+    const loggedIn = localStorage.getItem("admin");
+    if (loggedIn) {
+      const admin = JSON.parse(loggedIn);
+      setAdmin(admin);
+    }
+  }, []);
+  useEffect(() => {
     refreshList();
   }, []);
-
-  //ska skrivas ut med state
-  const [book, setBooks] = useState({});
 
   //hämta boken
   const refreshList = async () => {
@@ -55,10 +61,17 @@ function DetailPage() {
             <dt className="col-sm-2">Datum för utlåning:</dt>
             <dd className="col-sm-10">{book.book_TimeRented}</dd>
             <dt className="col-sm-2">Lånad av:</dt>
-            <dd className="col-sm-10">{book.user}</dd>
+            {admin != null ? (
+              <dd className="col-sm-10">{book.user}</dd>
+            ) : (
+              <dd className="col-sm-10">
+                {" "}
+                <b>Endast admin kan se vem som lånat böcker</b>
+              </dd>
+            )}
           </dl>
         ) : (
-          <p>Detta fält visas endast om boken är utlånad</p>
+          <p> Ej utlånad</p>
         )}
       </div>
     </div>

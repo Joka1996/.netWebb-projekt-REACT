@@ -1,60 +1,100 @@
 import { EndPoints } from "./EndPoints";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Component } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-function Admin() {
-  let navigate = useNavigate();
+function Login() {
+  //let navigate = useNavigate();
+  const [adminName, setAdminName] = useState("");
+  const [adminPass, setAdminPass] = useState("");
+  const [message, setMessage] = useState("");
+  const [admin, setAdmin] = useState();
 
-  const [admin, setAdmin] = useState("");
-  const [pass, setPass] = useState("");
-  //gör en koll om användaren är inloggad
   useEffect(() => {
+    //kolla om admin är lagrad i localstorage
     const loggedIn = localStorage.getItem("admin");
     if (loggedIn) {
-      const foundAdmin = JSON.parse(loggedIn);
-      setAdmin(foundAdmin);
+      const foundUser = JSON.parse(loggedIn);
+      setAdmin(foundUser);
+      console.log(setAdmin(loggedIn));
     } else {
       loginAdmin();
     }
   }, []);
+  //utloggning
+  const handleLogout = () => {
+    setAdmin({});
+    setAdminName("");
+    setAdminPass("");
+    localStorage.clear();
+    window.alert("Utloggad");
+    //ladda om sidan
+    window.location.reload(false);
+  };
 
   const loginAdmin = async (e) => {
     e.preventDefault();
-    const admin = { admin, pass };
-    await fetch(EndPoints.API_URL + "Admins", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(admin),
-    }).then((res) => {
-      if (res.status === 200) {
+    const admin = { adminName, adminPass };
+    //detta är kanske inte den bästa lösningen för inlogg då det syns i konsolen...
+    fetch(
+      EndPoints.API_URL +
+        "Admins/login?adminName=" +
+        admin.adminName +
+        "&adminPass=" +
+        admin.adminPass,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Response: "response",
+        },
+        body: JSON.stringify(admin),
+      }
+    ).then((response) => {
+      //skriv ut olika svar
+      if (response.status === 200) {
         console.log("inloggad");
-        setAdmin(admin.admin_Name);
-        localStorage.setItem("admin", JSON.stringify(admin.admin_Name));
+        setMessage("Inloggad!");
+        //spara till localStorage
+        setAdmin(admin.adminName);
+        localStorage.setItem("admin", JSON.stringify(admin.adminName));
       }
-      if (res.status === 400) {
-        console.log("fel lösen");
-      }
-      if (res.status === 401) {
-        console.log("användare saknas");
+      if (response.status === 404) {
+        console.log("fel");
+        setMessage("FEL!");
       }
     });
   };
+
+  if (admin) {
+    return (
+      <div className="App">
+        <div className="text-center text-lg-start mt-4 pt-2">
+          <h3>Inloggad som administratör: {admin}</h3>
+          <button className="btn btn-primary btn-lg" onClick={handleLogout}>
+            Logga ut
+          </button>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="App">
       <div>
         <h3>Inloggning</h3>
+        <p>{message}</p>
+        <p></p>
         <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-          <form>
+          <form onSubmit={loginAdmin}>
             <div className="input-group mb-3">
               <span className="input-group-text">Admin:</span>
               <input
                 type="text"
+                name=""
+                id=""
                 className="form-control"
-                value={admin}
-                onChange={(e) => setAdmin(e.target.value)}
+                value={adminName}
+                onChange={(e) => setAdminName(e.target.value)}
               ></input>
             </div>
             <div className="input-group mb-3">
@@ -62,18 +102,12 @@ function Admin() {
               <input
                 type="password"
                 className="form-control"
-                value={pass}
-                onChange={(e) => setPass(e.target.value)}
+                value={adminPass}
+                onChange={(e) => setAdminPass(e.target.value)}
               ></input>
             </div>
             <div className="text-center text-lg-start mt-4 pt-2">
-              <button
-                type="button"
-                className="btn btn-primary btn-lg"
-                onClick={loginAdmin}
-              >
-                Logga in
-              </button>
+              <button className="btn btn-primary btn-lg">Logga in</button>
             </div>
           </form>
         </div>
@@ -82,4 +116,4 @@ function Admin() {
   );
 }
 
-export default Admin;
+export default Login;

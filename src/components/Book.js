@@ -21,6 +21,7 @@ export class Book extends Component {
       user: "",
       author: "",
       category: "",
+      admin: "",
     };
   }
   //hämta böcker, författare, användare och kategorier. placera i select dropdown
@@ -51,9 +52,18 @@ export class Book extends Component {
         this.setState({ books: data });
       });
   }
+
+  //kolla local storage och placera den i state.
+  storage() {
+    const getAdmin = localStorage.getItem("admin");
+    const admin = JSON.parse(getAdmin);
+    console.log(admin);
+    this.setState({ admin: admin });
+  }
   //kör hämta
   componentDidMount() {
     this.refreshList();
+    this.storage();
   }
   //En enskild för varje state
   changeBook_Title = (e) => {
@@ -255,19 +265,23 @@ export class Book extends Component {
       author,
       category,
       user,
+      admin,
     } = this.state;
     return (
       <div>
-        <button
-          type="button"
-          className="btn btn-primary m-2 float-end"
-          data-bs-toggle="modal"
-          data-bs-target="#modalBook"
-          onClick={() => this.addClick()}
-        >
-          Lägg till bok
-        </button>
-        <h3>Bok page</h3>
+        {admin != null ? (
+          <button
+            type="button"
+            className="btn btn-success m-2 float-end"
+            data-bs-toggle="modal"
+            data-bs-target="#modalBook"
+            onClick={() => this.addClick()}
+          >
+            Lägg till bok
+          </button>
+        ) : null}
+
+        <h3 className="d-flex justify-content-center m-3">Våra böcker</h3>
         <table className="table table-striped">
           <thead>
             <tr>
@@ -305,29 +319,40 @@ export class Book extends Component {
                   </td>
                 )}
                 <td>
-                  <button className="btn btn-light mr-1">
-                    <Link to={`/detailpage/${bok.bookId}`}>Detajer</Link>
+                  <button className="btn btn-info btn-sm">
+                    <Link
+                      to={`/detailpage/${bok.bookId}`}
+                      className="link-dark"
+                    >
+                      Detajer
+                    </Link>
                   </button>
                 </td>
                 <td>
-                  <button
-                    type="button"
-                    className="btn btn-light mr-1"
-                    data-bs-toggle="modal"
-                    data-bs-target="#modalBook"
-                    aria-label="uppdatera bok"
-                    onClick={() => this.editClick(bok)}
-                  >
-                    Uppdatera
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-light mr-1"
-                    aria-label="radera bok"
-                    onClick={() => this.deleteClick(bok.bookId)}
-                  >
-                    Radera
-                  </button>
+                  {admin != null ? (
+                    <button
+                      type="button"
+                      className="btn btn-warning btn-sm"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalBook"
+                      aria-label="uppdatera bok"
+                      onClick={() => this.editClick(bok)}
+                    >
+                      Uppdatera
+                    </button>
+                  ) : (
+                    <p>Admin</p>
+                  )}
+                  {admin != null ? (
+                    <button
+                      type="button"
+                      className="btn btn-danger btn-sm"
+                      aria-label="radera bok"
+                      onClick={() => this.deleteClick(bok.bookId)}
+                    >
+                      Radera
+                    </button>
+                  ) : null}
                 </td>
               </tr>
             ))}
@@ -453,7 +478,7 @@ export class Book extends Component {
                 {bookId === 0 ? (
                   <button
                     type="button"
-                    className="btn btn-primary float-start"
+                    className="btn btn-success float-start"
                     onClick={() => this.createClick()}
                   >
                     Skapa
@@ -462,7 +487,7 @@ export class Book extends Component {
                 {bookId !== 0 ? (
                   <button
                     type="button"
-                    className="btn btn-primary float-start"
+                    className="btn btn-success float-start "
                     onClick={() => this.updateClick(bookId)}
                   >
                     Uppdatera

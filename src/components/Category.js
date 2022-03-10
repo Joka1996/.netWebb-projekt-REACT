@@ -15,8 +15,17 @@ export class Category extends Component {
       category_Name: "",
       //int
       categoryId: 0,
+      admin: "",
     };
   }
+  //kolla local storage och placera den i state.
+  storage() {
+    const getAdmin = localStorage.getItem("admin");
+    const admin = JSON.parse(getAdmin);
+    console.log(admin);
+    this.setState({ admin: admin });
+  }
+
   //hämta kategorier,
   refreshList() {
     fetch(EndPoints.API_URL + "Categories")
@@ -29,6 +38,7 @@ export class Category extends Component {
   //kör refreshlist
   componentDidMount() {
     this.refreshList();
+    this.storage();
   }
   //hämta value
   changeCategory_Name = (e) => {
@@ -145,59 +155,72 @@ export class Category extends Component {
   //skriv ut
   render() {
     //för att använda usestate
-    const { categories, modalTitle, categoryId, category_Name } = this.state;
+    const { categories, modalTitle, categoryId, category_Name, admin } =
+      this.state;
     return (
       <div>
-        <button
-          type="button"
-          className="btn btn-primary m-2 float-end"
-          data-bs-toggle="modal"
-          data-bs-target="#modalCategory"
-          onClick={() => this.addClick()}
-        >
-          Lägg till en ny kategori
-        </button>
-        <h3>Kategorier</h3>
+        {admin != null ? (
+          <button
+            type="button"
+            className="btn btn-success m-2 float-end"
+            data-bs-toggle="modal"
+            data-bs-target="#modalCategory"
+            onClick={() => this.addClick()}
+          >
+            Lägg till en ny kategori
+          </button>
+        ) : null}
+
+        <h3 className="d-flex justify-content-center m-3">Kategorier</h3>
         <table className="table table-striped">
           <thead>
             <tr>
-              <th>Kategori-id</th>
-              <th>Kategori-namn</th>
+              <th>Kategori</th>
+              <th>Detaljer</th>
               <th>Alternativ</th>
             </tr>
           </thead>
           <tbody>
             {categories.map((cat) => (
               <tr key={cat.categoryId}>
-                <td>{cat.categoryId}</td>
                 <td>{cat.category_Name}</td>
                 <td>
-                  <button className="btn btn-light mr-1">
-                    <Link to={`/categorydetail/${cat.categoryId}`}>
+                  <button className="btn btn-info mr-1 btn-sm">
+                    <Link
+                      className="link-dark"
+                      to={`/categorydetail/${cat.categoryId}`}
+                    >
                       Detajer
                     </Link>
                   </button>
                 </td>
                 <td>
+                  {admin != null ? (
+                    <button
+                      type="button"
+                      className="btn btn-warning mr-1 btn-sm"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalCategory"
+                      onClick={() => this.editClick(cat)}
+                    >
+                      {" "}
+                      Uppdatera
+                    </button>
+                  ) : (
+                    <p>Admin</p>
+                  )}
+                  {admin != null ? (
+                    <button
+                      type="button"
+                      className="btn btn-danger mr-1 btn-sm"
+                      onClick={() => this.deleteClick(cat.categoryId)}
+                    >
+                      {" "}
+                      Radera
+                    </button>
+                  ) : null}
+
                   {/**skicka med cat (category) så att man kan plocka ut rätt id i funktionen editClick */}
-                  <button
-                    type="button"
-                    className="btn btn-light mr-1"
-                    data-bs-toggle="modal"
-                    data-bs-target="#modalCategory"
-                    onClick={() => this.editClick(cat)}
-                  >
-                    {" "}
-                    Uppdatera
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-light mr-1"
-                    onClick={() => this.deleteClick(cat.categoryId)}
-                  >
-                    {" "}
-                    Radera
-                  </button>
                 </td>
               </tr>
             ))}
@@ -236,7 +259,7 @@ export class Category extends Component {
                 {categoryId === 0 ? (
                   <button
                     type="button"
-                    className="btn btn-primary float-start"
+                    className="btn btn-success float-start"
                     onClick={() => this.createClick()}
                   >
                     Skapa
@@ -245,7 +268,7 @@ export class Category extends Component {
                 {categoryId !== 0 ? (
                   <button
                     type="button"
-                    className="btn btn-primary float-start"
+                    className="btn btn-warning float-start"
                     onClick={() => this.updateClick(categoryId)}
                   >
                     Uppdatera

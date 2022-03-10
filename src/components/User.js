@@ -11,6 +11,7 @@ export class User extends Component {
       modalTitle: "",
       user_Name: "",
       userId: 0,
+      admin: "",
     };
   }
   //hämta användare
@@ -21,9 +22,17 @@ export class User extends Component {
         this.setState({ users: data });
       });
   }
+  //kolla local storage och placera den i state.
+  storage() {
+    const getAdmin = localStorage.getItem("admin");
+    const admin = JSON.parse(getAdmin);
+    console.log(admin);
+    this.setState({ admin: admin });
+  }
   //kör hämta
   componentDidMount() {
     this.refreshList();
+    this.storage();
   }
 
   //hämta value
@@ -129,49 +138,56 @@ export class User extends Component {
 
   render() {
     //this state
-    const { users, modalTitle, userId, user_Name } = this.state;
+    const { users, modalTitle, userId, user_Name, admin } = this.state;
     return (
       <div>
-        <button
-          type="button"
-          className="btn btn-primary m-2 float-end"
-          data-bs-toggle="modal"
-          data-bs-target="#modalUser"
-          onClick={() => this.addClick()}
-        >
-          Lägg till användare
-        </button>
-        <h3>Användare</h3>
+        {admin != null ? (
+          <button
+            type="button"
+            className="btn btn-success m-2 float-end"
+            data-bs-toggle="modal"
+            data-bs-target="#modalUser"
+            onClick={() => this.addClick()}
+          >
+            Lägg till användare
+          </button>
+        ) : null}
+
+        <h3 className="d-flex justify-content-center m-3">Användare</h3>
         <table className="table table-striped">
           <thead>
             <tr>
-              <th>Användar-id</th>
-              <th>Användar-namn</th>
+              <th>Användare</th>
               <th>Alternativ</th>
             </tr>
           </thead>
           <tbody>
             {users.map((usr) => (
               <tr key={usr.userId}>
-                <td>{usr.userId}</td>
                 <td>{usr.user_Name}</td>
                 <td>
-                  <button
-                    type="button"
-                    className="btn btn-light mr-1"
-                    data-bs-toggle="modal"
-                    data-bs-target="#modalUser"
-                    onClick={() => this.editClick(usr)}
-                  >
-                    Uppdatera
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-light mr-1"
-                    onClick={() => this.deleteClick(usr.userId)}
-                  >
-                    Radera
-                  </button>
+                  {admin != null ? (
+                    <button
+                      type="button"
+                      className="btn btn-warning mr-1 btn-sm"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalUser"
+                      onClick={() => this.editClick(usr)}
+                    >
+                      Uppdatera
+                    </button>
+                  ) : (
+                    <p>Admin</p>
+                  )}
+                  {admin != null ? (
+                    <button
+                      type="button"
+                      className="btn btn-danger mr-1 btn-sm"
+                      onClick={() => this.deleteClick(usr.userId)}
+                    >
+                      Radera
+                    </button>
+                  ) : null}
                 </td>
               </tr>
             ))}
@@ -203,7 +219,7 @@ export class User extends Component {
                 {userId === 0 ? (
                   <button
                     type="button"
-                    className="btn btn-primary float-start"
+                    className="btn btn-success float-start"
                     onClick={() => this.createClick()}
                   >
                     Skapa
@@ -212,7 +228,7 @@ export class User extends Component {
                 {userId !== 0 ? (
                   <button
                     type="button"
-                    className="btn btn-primary float-start"
+                    className="btn btn-warning float-start"
                     onClick={() => this.updateClick(userId)}
                   >
                     Skapa

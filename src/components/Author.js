@@ -14,6 +14,7 @@ export class Author extends Component {
       author_Name: "",
       author_books: "",
       authorId: 0,
+      admin: "",
     };
   }
 
@@ -26,10 +27,19 @@ export class Author extends Component {
         this.setState({ authors: data });
       });
   }
+  //kolla local storage och placera den i state.
+  storage() {
+    const getAdmin = localStorage.getItem("admin");
+    const admin = JSON.parse(getAdmin);
+    console.log(admin);
+    this.setState({ admin: admin });
+  }
 
   //kör
   componentDidMount() {
     this.refreshList();
+    //localStorage
+    this.storage();
   }
   changeAuthor_Name = (e) => {
     this.setState({ author_Name: e.target.value });
@@ -136,54 +146,67 @@ export class Author extends Component {
   /*******************RENDER*********************************************************************/
   //samma layout som för kategorier
   render() {
-    const { authors, modalTitle, authorId, author_Name } = this.state;
+    const { authors, modalTitle, authorId, author_Name, admin } = this.state;
     return (
       <div>
-        <button
-          type="button"
-          className="btn btn-primary m-2 float-end"
-          data-bs-toggle="modal"
-          data-bs-target="#modalAuthor"
-          onClick={() => this.addClick()}
-        >
-          Lägg till ny författare
-        </button>
-        <h3>Författare</h3>
+        {admin != null ? (
+          <button
+            type="button"
+            className="btn btn-success m-2 float-end"
+            data-bs-toggle="modal"
+            data-bs-target="#modalAuthor"
+            onClick={() => this.addClick()}
+          >
+            Lägg till ny författare
+          </button>
+        ) : null}
+
+        <h3 className="d-flex justify-content-center m-3">Författare</h3>
         <table className="table table-striped">
           <thead>
             <tr>
-              <th>Författare-id</th>
-              <th>Författare-namn</th>
+              <th>Författare</th>
+              <th>Detaljer</th>
               <th>Alternativ</th>
             </tr>
           </thead>
           <tbody>
             {authors.map((aut) => (
               <tr key={aut.authorId}>
-                <td>{aut.authorId}</td>
                 <td>{aut.author_Name}</td>
                 <td>
-                  <button className="btn btn-light mr-1">
-                    <Link to={`/authordetail/${aut.authorId}`}>Detajer</Link>
+                  <button className="btn btn-info mr-1 btn-sm">
+                    <Link
+                      className="link-dark"
+                      to={`/authordetail/${aut.authorId}`}
+                    >
+                      Detajer
+                    </Link>
                   </button>
                 </td>
                 <td>
-                  <button
-                    type="button"
-                    className="btn btn-light mr-1"
-                    data-bs-toggle="modal"
-                    data-bs-target="#modalAuthor"
-                    onClick={() => this.editClick(aut)}
-                  >
-                    Uppdatera
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-light mr-1"
-                    onClick={() => this.deleteClick(aut.authorId)}
-                  >
-                    Radera
-                  </button>
+                  {admin != null ? (
+                    <button
+                      type="button"
+                      className="btn btn-warning mr-1 btn-sm"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalAuthor"
+                      onClick={() => this.editClick(aut)}
+                    >
+                      Uppdatera
+                    </button>
+                  ) : (
+                    <p>Admin</p>
+                  )}
+                  {admin != null ? (
+                    <button
+                      type="button"
+                      className="btn btn-danger mr-1 btn-sm"
+                      onClick={() => this.deleteClick(aut.authorId)}
+                    >
+                      Radera
+                    </button>
+                  ) : null}
                 </td>
               </tr>
             ))}
@@ -223,7 +246,7 @@ export class Author extends Component {
                 {authorId === 0 ? (
                   <button
                     type="button"
-                    className="btn btn-primary float-start"
+                    className="btn btn-success float-start"
                     onClick={() => this.createClick()}
                   >
                     Skapa
@@ -232,7 +255,7 @@ export class Author extends Component {
                 {authorId !== 0 ? (
                   <button
                     type="button"
-                    className="btn btn-primary float-start"
+                    className="btn btn-warning float-start"
                     onClick={() => this.updateClick(authorId)}
                   >
                     Uppdatera

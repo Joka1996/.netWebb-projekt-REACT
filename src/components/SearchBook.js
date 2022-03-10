@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { EndPoints } from "./components/EndPoints";
+import { EndPoints } from "./EndPoints";
 
 export class SearchBook extends Component {
   constructor(props) {
@@ -7,6 +7,7 @@ export class SearchBook extends Component {
     this.state = {
       book: [],
       search: "",
+      admin: "",
     };
   }
 
@@ -17,9 +18,17 @@ export class SearchBook extends Component {
         this.setState({ book: data });
       });
   }
-  /*componentDidMount() {
-    this.refreshList();
-  }*/
+  //kolla local storage och placera den i state.
+  storage() {
+    const getAdmin = localStorage.getItem("admin");
+    const admin = JSON.parse(getAdmin);
+    console.log(admin);
+    this.setState({ admin: admin });
+  }
+  //kör
+  componentDidMount() {
+    this.storage();
+  }
   change_search = (e) => {
     this.setState({
       search: e.target.value,
@@ -28,11 +37,11 @@ export class SearchBook extends Component {
     });
   };
   render() {
-    const { book, search } = this.state;
+    const { book, search, admin } = this.state;
     console.log(book);
     console.log(search);
     return (
-      <div>
+      <div className="App container">
         <h3>Sök efter bok på titel</h3>
         <div className="input-group">
           <input
@@ -47,18 +56,18 @@ export class SearchBook extends Component {
           />
           <button
             type="button"
-            className="btn btn-outline-primary"
+            className="btn btn-info"
             aria-label="sök"
             onClick={() => this.refreshList(search)}
           >
             Sök
           </button>
         </div>
-        <h2>resultat</h2>
-
+        <p>OBS: Sök-funktionen är känslig för stor/liten bokstav</p>
+        <h4>Resultat</h4>
         {book.map((bok) => (
           <div>
-            <dl className="row">
+            <dl className="row dl-striped bg-light">
               <dt className="col-sm-2">Titel:</dt>
               <dd className="col-sm-10"> {bok.book_Title}</dd>
               <dt className="col-sm-2">Författare:</dt>
@@ -74,7 +83,7 @@ export class SearchBook extends Component {
             <h4>Utlåning</h4>
             {/*visa bara utlåning om boken är utlånad */}
             {bok.book_Rented === true ? (
-              <dl className="row">
+              <dl className="row bg-light">
                 <dt className="col-sm-2">Utlånad?</dt>
                 <dd className="col-sm-10">
                   <input
@@ -88,10 +97,17 @@ export class SearchBook extends Component {
                 <dt className="col-sm-2">Datum för utlåning:</dt>
                 <dd className="col-sm-10">{bok.book_TimeRented}</dd>
                 <dt className="col-sm-2">Lånad av:</dt>
-                <dd className="col-sm-10">{bok.user}</dd>
+                {admin != null ? (
+                  <dd className="col-sm-10">{bok.user}</dd>
+                ) : (
+                  <dd className="col-sm-10">
+                    {" "}
+                    <b>Endast admin kan se vem som lånat böcker</b>
+                  </dd>
+                )}
               </dl>
             ) : (
-              <p>Detta fält visas endast om boken är utlånad</p>
+              <p>Ej utlånad</p>
             )}
           </div>
         ))}
