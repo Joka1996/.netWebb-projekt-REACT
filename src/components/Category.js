@@ -17,6 +17,7 @@ export class Category extends Component {
       //int
       categoryId: 0,
       admin: "",
+      message: "",
     };
   }
   //kolla local storage och placera den i state.
@@ -45,6 +46,7 @@ export class Category extends Component {
   changeCategory_Name = (e) => {
     this.setState({ category_Name: e.target.value });
   };
+
   //öppna modal window
   addClick() {
     this.setState({
@@ -77,12 +79,12 @@ export class Category extends Component {
       .then((response) => response.json())
       .then(
         (result) => {
-          console.log(result);
-          //alert för nu, ska nog vara något annat egentligen.
-          alert(result.category_Name + " är tillagd");
+          //console.log(result);
+          this.setState({ message: result.category_Name + " är tillagd" });
           this.refreshList();
         },
         (error) => {
+          this.setState({ message: "Något gick fel!" });
           alert(error + " Fel uppstod");
         }
       );
@@ -111,13 +113,14 @@ export class Category extends Component {
         (result) => {
           console.log(result);
           //alert för nu, ska nog vara något annat egentligen.
-          alert("uppdaterad");
+          this.setState({ message: "Uppdaterad!" });
           //uppdatera listan
           this.refreshList();
           //tillfällig lösning på att uppdatera skriver över skapa knappen
           window.location.reload(false);
         },
         (error) => {
+          this.setState({ message: "Fel!" });
           alert(error + " Fel uppstod");
         }
       );
@@ -156,8 +159,14 @@ export class Category extends Component {
   //skriv ut
   render() {
     //för att använda usestate
-    const { categories, modalTitle, categoryId, category_Name, admin } =
-      this.state;
+    const {
+      categories,
+      modalTitle,
+      categoryId,
+      category_Name,
+      admin,
+      message,
+    } = this.state;
     return (
       <div>
         {admin != null ? (
@@ -245,6 +254,7 @@ export class Category extends Component {
                 ></button>
               </div>
               <div className="modal-body">
+                <p className="success">{message}</p>
                 <div className="input-group mb-3">
                   <label className="input-group-text">Kategori</label>
                   <input

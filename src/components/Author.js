@@ -15,6 +15,7 @@ export class Author extends Component {
       author_books: "",
       authorId: 0,
       admin: "",
+      message: "",
     };
   }
 
@@ -79,11 +80,13 @@ export class Author extends Component {
       .then(
         (result) => {
           console.log(result);
-          alert(result.author_Name + " är tillagd");
+          this.setState({ message: result.author_Name + " är tillagd" });
+
           this.refreshList();
         },
         (error) => {
-          alert("fel");
+          console.log(error);
+          this.setState({ message: "Något gick fel!" });
         }
       );
   }
@@ -107,12 +110,13 @@ export class Author extends Component {
       })
       .then(
         (result) => {
-          console.log(result);
-          alert("Uppdaterad");
+          //console.log(result);
+          this.setState({ message: result.author_Name + " är uppdaterad!" });
           this.refreshList();
         },
         (error) => {
-          alert("fel");
+          console.log(error);
+          this.setState({ message: "Något gick fel!" });
         }
       );
   }
@@ -146,7 +150,8 @@ export class Author extends Component {
   /*******************RENDER*********************************************************************/
   //samma layout som för kategorier
   render() {
-    const { authors, modalTitle, authorId, author_Name, admin } = this.state;
+    const { authors, modalTitle, authorId, author_Name, admin, message } =
+      this.state;
     return (
       <div>
         {admin != null ? (
@@ -232,6 +237,7 @@ export class Author extends Component {
               </div>
 
               <div className="modal-body">
+                <p className="success">{message}</p>
                 <div className="input-group mb-3">
                   <label className="input-group-text"> Författare </label>
                   <input

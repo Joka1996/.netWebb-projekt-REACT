@@ -26,6 +26,7 @@ export class Book extends Component {
       admin: "",
       loggedInUser: "",
       currentDateTime: new Date().toLocaleString(),
+      message: "",
     };
   }
 
@@ -136,6 +137,7 @@ export class Book extends Component {
       author: "",
       category: "",
       book_Rating: 0,
+      message: "",
     });
   }
   //modal update
@@ -152,6 +154,7 @@ export class Book extends Component {
       user: bok.user,
       author: bok.author,
       category: bok.category,
+      message: "",
     });
   }
 
@@ -202,13 +205,14 @@ export class Book extends Component {
       .then((response) => response.json())
       .then(
         (result) => {
-          console.log(result);
-          alert("Tillagd");
+          //console.log(result);
+          this.setState({ message: "Tillagd!" });
           //uppdatera listan
           this.refreshList();
         },
-        (error) => {
-          alert("fel");
+        (errors) => {
+          this.setState({ message: "Något gick fel!" });
+          console.log(errors);
         }
       );
   }
@@ -233,7 +237,7 @@ export class Book extends Component {
             this.refreshList();
           },
           (error) => {
-            alert("Fel");
+            alert(error + " Fel");
           }
         );
     }
@@ -276,11 +280,12 @@ export class Book extends Component {
       .then(
         (result) => {
           console.log(result);
-          alert("Uppdaterad");
+          this.setState({ message: "Uppdaterad!" });
           this.refreshList();
         },
-        (error) => {
-          console.log(error + "fel");
+        (errors) => {
+          this.setState({ message: "Något gick fel!" });
+          console.log(errors + "fel");
         }
       );
   }
@@ -305,6 +310,7 @@ export class Book extends Component {
       admin,
       loggedInUser,
       currentDateTime,
+      message,
     } = this.state;
     return (
       <div>
@@ -421,6 +427,8 @@ export class Book extends Component {
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">{modalTitle}</h5>
+                <br />
+
                 <button
                   type="button"
                   className="btn-close"
@@ -428,7 +436,10 @@ export class Book extends Component {
                   aria-label="Close"
                 ></button>
               </div>
-              <div className="modal-body">
+              <div className="modal-body" aria-label="Skapa bok-formulär">
+                <h5 className="success" aria-label="alert">
+                  {message}
+                </h5>
                 {loggedInUser != null ? null : (
                   <div className="input-group mb-3">
                     <label className="input-group-text">Titel</label>
@@ -608,7 +619,7 @@ export class Book extends Component {
                 {bookId !== 0 ? (
                   <button
                     type="button"
-                    className="btn btn-success float-start "
+                    className="btn btn-warning float-start "
                     onClick={() => this.updateClick(bookId)}
                   >
                     Uppdatera

@@ -13,6 +13,7 @@ export class User extends Component {
       user_Password: "",
       userId: 0,
       admin: "",
+      message: "",
     };
   }
   //hämta användare
@@ -83,6 +84,7 @@ export class User extends Component {
           this.refreshList();
         },
         (error) => {
+          console.log(error);
           alert("fel");
         }
       );
@@ -146,8 +148,15 @@ export class User extends Component {
 
   render() {
     //this state
-    const { users, modalTitle, userId, user_Name, user_Password, admin } =
-      this.state;
+    const {
+      users,
+      modalTitle,
+      userId,
+      user_Name,
+      user_Password,
+      admin,
+      message,
+    } = this.state;
     return (
       <div>
         {admin != null ? (
@@ -215,7 +224,8 @@ export class User extends Component {
                   aria-label="Close"
                 ></button>
               </div>
-              <div className="modal-body">
+              <div className="modal-body" aria-label="Skapa användare-formulär">
+                <p className="success">{message}</p>
                 <div className="input-group mb-3">
                   <label className="input-group-text">Användare:</label>
                   <input
@@ -251,7 +261,7 @@ export class User extends Component {
                     className="btn btn-warning float-start"
                     onClick={() => this.updateClick(userId)}
                   >
-                    Skapa
+                    Uppdatera
                   </button>
                 ) : null}
               </div>
