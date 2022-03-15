@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { EndPoints } from "./EndPoints";
+import { Footer } from "./Footer";
 
 export class Book extends Component {
   //constructor
@@ -18,12 +19,16 @@ export class Book extends Component {
       book_ImageUrl: "",
       book_Rented: false,
       book_TimeRented: "",
+      book_Rating: 0,
       user: "",
       author: "",
       category: "",
       admin: "",
+      loggedInUser: "",
+      currentDateTime: new Date().toLocaleString(),
     };
   }
+
   //hämta böcker, författare, användare och kategorier. placera i select dropdown
   refreshList() {
     //Författare
@@ -57,8 +62,13 @@ export class Book extends Component {
   storage() {
     const getAdmin = localStorage.getItem("admin");
     const admin = JSON.parse(getAdmin);
-    console.log(admin);
+    //console.log(admin);
     this.setState({ admin: admin });
+    //användare
+    const getUser = localStorage.getItem("user");
+    const userLoggedIn = JSON.parse(getUser);
+    //console.log(userLoggedIn);
+    this.setState({ loggedInUser: userLoggedIn });
   }
   //kör hämta
   componentDidMount() {
@@ -107,6 +117,11 @@ export class Book extends Component {
       category: e.target.value,
     });
   };
+  changeBook_Rating = (e) => {
+    this.setState({
+      book_Rating: e.target.value,
+    });
+  };
   //modal window add
   addClick() {
     this.setState({
@@ -120,6 +135,7 @@ export class Book extends Component {
       user: "",
       author: "",
       category: "",
+      book_Rating: 0,
     });
   }
   //modal update
@@ -132,7 +148,24 @@ export class Book extends Component {
       book_ImageUrl: bok.book_ImageUrl,
       book_Rented: bok.book_Rented,
       book_TimeRented: bok.book_TimeRented,
+      book_Rating: bok.book_Rating,
       user: bok.user,
+      author: bok.author,
+      category: bok.category,
+    });
+  }
+
+  rentClick(bok, loggedInUser) {
+    this.setState({
+      modalTitle: "Låna Bok",
+      bookId: bok.bookId,
+      book_Title: bok.book_Title,
+      book_Pages: bok.book_Pages,
+      book_ImageUrl: bok.book_ImageUrl,
+      book_Rented: bok.book_Rented,
+      book_TimeRented: bok.book_TimeRented,
+      book_Rating: bok.book_Rating,
+      user: loggedInUser,
       author: bok.author,
       category: bok.category,
     });
@@ -160,6 +193,7 @@ export class Book extends Component {
         book_ImageUrl: this.state.book_ImageUrl,
         book_Rented: stringToBoolean(convert),
         book_TimeRented: this.state.book_TimeRented,
+        book_Rating: this.state.book_Rating,
         user: this.state.user,
         author: this.state.author,
         category: this.state.category,
@@ -215,6 +249,7 @@ export class Book extends Component {
         return false;
       }
     }
+
     fetch(EndPoints.API_URL + "Books/" + id, {
       method: "PUT",
       headers: {
@@ -229,6 +264,7 @@ export class Book extends Component {
         book_ImageUrl: this.state.book_ImageUrl,
         book_Rented: stringToBoolean(convert),
         book_TimeRented: this.state.book_TimeRented,
+        book_Rating: this.state.book_Rating,
         user: this.state.user,
         author: this.state.author,
         category: this.state.category,
@@ -262,10 +298,13 @@ export class Book extends Component {
       book_ImageUrl,
       book_Rented,
       book_TimeRented,
+      book_Rating,
       author,
       category,
       user,
       admin,
+      loggedInUser,
+      currentDateTime,
     } = this.state;
     return (
       <div>
@@ -288,7 +327,6 @@ export class Book extends Component {
               <th>Titel</th>
               <th>Kategori</th>
               <th>Utlånad?</th>
-              <th>Detaljer</th>
               <th>Alternativ</th>
             </tr>
           </thead>
@@ -327,8 +365,7 @@ export class Book extends Component {
                       Detajer
                     </Link>
                   </button>
-                </td>
-                <td>
+
                   {admin != null ? (
                     <button
                       type="button"
@@ -340,9 +377,7 @@ export class Book extends Component {
                     >
                       Uppdatera
                     </button>
-                  ) : (
-                    <p>Admin</p>
-                  )}
+                  ) : null}
                   {admin != null ? (
                     <button
                       type="button"
@@ -351,6 +386,22 @@ export class Book extends Component {
                       onClick={() => this.deleteClick(bok.bookId)}
                     >
                       Radera
+                    </button>
+                  ) : null}
+                  {/**OM användaren är inloggad, har lånat boken eller boken är ej utlånad, så kan användaren låna. */}
+                  {(loggedInUser != null && bok.user === loggedInUser) ||
+                  (bok.user === "Ej utlånad" &&
+                    loggedInUser != null &&
+                    admin === null) ? (
+                    <button
+                      type="button"
+                      className="btn btn-success btn-sm"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalBook"
+                      aria-label="låna bok"
+                      onClick={() => this.rentClick(bok, loggedInUser)}
+                    >
+                      Låna
                     </button>
                   ) : null}
                 </td>
@@ -378,96 +429,166 @@ export class Book extends Component {
                 ></button>
               </div>
               <div className="modal-body">
+                {loggedInUser != null ? null : (
+                  <div className="input-group mb-3">
+                    <label className="input-group-text">Titel</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={book_Title}
+                      onChange={this.changeBook_Title}
+                    ></input>
+                  </div>
+                )}
+
+                {loggedInUser != null ? null : (
+                  <div className="input-group mb-3">
+                    <label className="input-group-text">Författare</label>
+                    <select
+                      className="form-select"
+                      value={author}
+                      onChange={this.changeBook_Author}
+                    >
+                      <option className="d-none">Välj författare</option>
+                      {authors.map((aut) => (
+                        <option key={aut.authorId}>{aut.author_Name}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+                {loggedInUser != null ? null : (
+                  <div className="input-group mb-3">
+                    <label className="input-group-text">Kategori</label>
+                    <select
+                      className="form-select"
+                      onChange={this.changeBook_Category}
+                      value={category}
+                    >
+                      <option className="d-none">Välj kategori</option>
+                      {categories.map((cat) => (
+                        <option key={cat.categoryId}>
+                          {cat.category_Name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+                {loggedInUser != null ? null : (
+                  <div className="input-group mb-3">
+                    <label className="input-group-text">Antal sidor</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={book_Pages}
+                      onChange={this.changeBook_Page}
+                    ></input>
+                  </div>
+                )}
+
+                {loggedInUser != null ? null : (
+                  <div className="input-group mb-3">
+                    <label className="input-group-text">Betyg</label>
+                    <select
+                      className="form-control"
+                      value={book_Rating}
+                      onChange={this.changeBook_Rating}
+                    >
+                      <option type="number" step="1">
+                        1
+                      </option>
+                      <option type="number" step="2">
+                        2
+                      </option>
+                      <option type="number" step="3">
+                        3
+                      </option>
+                      <option type="number" step="4">
+                        4
+                      </option>
+                      <option type="number" step="5">
+                        5
+                      </option>
+                    </select>
+                  </div>
+                )}
+
+                {loggedInUser != null ? null : (
+                  <div className="input-group mb-3">
+                    <label className="input-group-text">Bild</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={book_ImageUrl}
+                      onChange={this.changeBook_ImageUrl}
+                    ></input>
+                  </div>
+                )}
+                {loggedInUser != null ? (
+                  <div className="input-group mb-3">
+                    <label className="input-group-text">Låna:</label>
+                    <select
+                      className="form-control"
+                      value={book_Rented}
+                      onChange={this.changeBook_Rented}
+                    >
+                      <option value="true">Låna</option>
+                      <option value="false">Lämna tillbaka</option>
+                    </select>
+                  </div>
+                ) : (
+                  <div className="input-group mb-3">
+                    <label className="input-group-text">Utlånad?</label>
+                    <select
+                      className="form-control"
+                      value={book_Rented}
+                      onChange={this.changeBook_Rented}
+                    >
+                      <option className="d-none">Välj alternativ</option>
+                      <option value="true">Ja</option>
+                      <option value="false">Nej</option>
+                    </select>
+                  </div>
+                )}
+
+                {/**Om användaren är inloggad fylls namnet i automatiskt */}
+                {loggedInUser != null ? (
+                  <div className="input-group mb-3">
+                    <label className="input-group-text">Utlånad till:</label>
+                    <select
+                      className="form-select"
+                      onChange={this.changeBook_User}
+                      value={user}
+                    >
+                      <option label="">Ej utlånad</option>
+                      <option defaultValue={loggedInUser}>
+                        {" "}
+                        {loggedInUser}
+                      </option>
+                    </select>
+                  </div>
+                ) : (
+                  <div className="input-group mb-3">
+                    <label className="input-group-text">Utlånad till:</label>
+                    <select
+                      className="form-select"
+                      onChange={this.changeBook_User}
+                      value={user}
+                    >
+                      <option className="d-none">Välj användare</option>
+                      <option label="">Ej utlånad</option>
+                      {users.map((usr) => (
+                        <option key={usr.userId}>{usr.user_Name}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
                 <div className="input-group mb-3">
-                  <span className="input-group-text">Titel</span>
+                  <label className="input-group-text">Datum utlånad:</label>
                   <input
-                    type="text"
-                    className="form-control"
-                    value={book_Title}
-                    onChange={this.changeBook_Title}
-                  ></input>
-                </div>
-
-                <div className="input-group mb-3">
-                  <span className="input-group-text">Författare</span>
-                  <select
-                    className="form-select"
-                    value={author}
-                    onChange={this.changeBook_Author}
-                  >
-                    <option className="d-none">Välj författare</option>
-                    {authors.map((aut) => (
-                      <option key={aut.authorId}>{aut.author_Name}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="input-group mb-3">
-                  <span className="input-group-text">Kategori</span>
-                  <select
-                    className="form-select"
-                    onChange={this.changeBook_Category}
-                    value={category}
-                  >
-                    <option className="d-none">Välj kategori</option>
-                    {categories.map((cat) => (
-                      <option key={cat.categoryId}>{cat.category_Name}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="input-group mb-3">
-                  <span className="input-group-text">Antal sidor</span>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={book_Pages}
-                    onChange={this.changeBook_Page}
-                  ></input>
-                </div>
-
-                <div className="input-group mb-3">
-                  <span className="input-group-text">Bild</span>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={book_ImageUrl}
-                    onChange={this.changeBook_ImageUrl}
-                  ></input>
-                </div>
-
-                <div className="input-group mb-3">
-                  <span className="input-group-text">Utlånad?</span>
-                  <select
-                    className="form-control"
-                    value={book_Rented}
-                    onChange={this.changeBook_Rented}
-                  >
-                    <option className="d-none">Välj alternativ</option>
-                    <option value="true">Ja</option>
-                    <option value="false">Nej</option>
-                  </select>
-                </div>
-
-                <div className="input-group mb-3">
-                  <span className="input-group-text">Utlånad till:</span>
-                  <select
-                    className="form-select"
-                    onChange={this.changeBook_User}
-                    value={user}
-                  >
-                    <option className="d-none">Välj användare</option>
-                    <option label="">Ej utlånad</option>
-                    {users.map((usr) => (
-                      <option key={usr.userId}>{usr.user_Name}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="input-group mb-3">
-                  <span className="input-group-text">Datum utlånad:</span>
-                  <input
-                    label=""
+                    min={currentDateTime}
+                    max={currentDateTime}
+                    label="Datum"
                     type="datetime-local"
                     className="form-control"
                     value={book_TimeRented}
@@ -497,6 +618,7 @@ export class Book extends Component {
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     );
   }

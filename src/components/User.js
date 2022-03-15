@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 //api url
 import { EndPoints } from "./EndPoints";
-
+import { Footer } from "./Footer";
 export class User extends Component {
   //constructor
   constructor(props) {
@@ -10,6 +10,7 @@ export class User extends Component {
       users: [],
       modalTitle: "",
       user_Name: "",
+      user_Password: "",
       userId: 0,
       admin: "",
     };
@@ -39,12 +40,16 @@ export class User extends Component {
   changeUser_Name = (e) => {
     this.setState({ user_Name: e.target.value });
   };
+  changeUser_Password = (e) => {
+    this.setState({ user_Password: e.target.value });
+  };
   //modal add
   addClick() {
     this.setState({
       modalTitle: "Lägg till användare",
       userId: 0,
       user_Name: "",
+      user_Password: "",
     });
   }
   //modal update-ruta
@@ -53,6 +58,7 @@ export class User extends Component {
       modalTitle: "Uppdatera användare",
       userId: usr.userId,
       user_Name: usr.user_Name,
+      user_Password: usr.user_Password,
     });
   }
   //lägg till användare
@@ -65,6 +71,7 @@ export class User extends Component {
       },
       body: JSON.stringify({
         user_Name: this.state.user_Name,
+        user_Password: this.state.user_Password,
       }),
     })
       .then((response) => response.json())
@@ -92,6 +99,7 @@ export class User extends Component {
       body: JSON.stringify({
         userId: this.state.userId,
         user_Name: this.state.user_Name,
+        user_Password: this.state.user_Password,
       }),
     })
       .then((response) => {
@@ -138,7 +146,8 @@ export class User extends Component {
 
   render() {
     //this state
-    const { users, modalTitle, userId, user_Name, admin } = this.state;
+    const { users, modalTitle, userId, user_Name, user_Password, admin } =
+      this.state;
     return (
       <div>
         {admin != null ? (
@@ -208,7 +217,7 @@ export class User extends Component {
               </div>
               <div className="modal-body">
                 <div className="input-group mb-3">
-                  <span className="input-group-text">Användare</span>
+                  <label className="input-group-text">Användare:</label>
                   <input
                     type="text"
                     className="form-control"
@@ -216,6 +225,17 @@ export class User extends Component {
                     onChange={this.changeUser_Name}
                   ></input>
                 </div>
+
+                <div className="input-group mb-3">
+                  <label className="input-group-text">Lösenord:</label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    value={user_Password}
+                    onChange={this.changeUser_Password}
+                  ></input>
+                </div>
+
                 {userId === 0 ? (
                   <button
                     type="button"
@@ -238,6 +258,7 @@ export class User extends Component {
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     );
   }

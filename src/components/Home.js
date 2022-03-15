@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Footer } from "./Footer";
 
 export class Home extends Component {
   render() {
@@ -6,9 +7,10 @@ export class Home extends Component {
       <div>
         <h3>Välkommen</h3>
         <p>
-          På denna sida står vilka böcker som finns i lager och ifall de är
-          utlånad i vårt bibliotek.
+          På denna sida kan du se vilka böcker vi har samt skapa ett konto och
+          låna.
         </p>
+        <Footer />
       </div>
     );
   }

@@ -1,6 +1,7 @@
 import React, { Component, useState, useEffect } from "react";
 import { EndPoints } from "./EndPoints";
 import { Link } from "react-router-dom";
+import { Footer } from "./Footer";
 
 export class Category extends Component {
   //constructor
@@ -176,7 +177,6 @@ export class Category extends Component {
           <thead>
             <tr>
               <th>Kategori</th>
-              <th>Detaljer</th>
               <th>Alternativ</th>
             </tr>
           </thead>
@@ -193,8 +193,7 @@ export class Category extends Component {
                       Detajer
                     </Link>
                   </button>
-                </td>
-                <td>
+
                   {admin != null ? (
                     <button
                       type="button"
@@ -247,7 +246,7 @@ export class Category extends Component {
               </div>
               <div className="modal-body">
                 <div className="input-group mb-3">
-                  <span className="input-group-text">Kategori</span>
+                  <label className="input-group-text">Kategori</label>
                   <input
                     type="text"
                     className="form-control"
@@ -278,6 +277,7 @@ export class Category extends Component {
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     );
   }

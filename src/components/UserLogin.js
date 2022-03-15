@@ -1,54 +1,54 @@
 import { EndPoints } from "./EndPoints";
 import React, { useState, useEffect, Component } from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import { Footer } from "./Footer";
-function Login() {
+
+function LoginUser() {
   //let navigate = useNavigate();
-  const [adminName, setAdminName] = useState("");
-  const [adminPass, setAdminPass] = useState("");
+  const [userName, setUserName] = useState("");
+  const [userPass, setUserPass] = useState("");
   const [message, setMessage] = useState("");
-  const [admin, setAdmin] = useState();
+  const [user, setUser] = useState();
 
   useEffect(() => {
-    //kolla om admin är lagrad i localstorage
-    const loggedIn = localStorage.getItem("admin");
+    //kolla om användare är lagrad i localstorage
+    const loggedIn = localStorage.getItem("user");
     if (loggedIn) {
       const foundUser = JSON.parse(loggedIn);
-      setAdmin(foundUser);
-      console.log(setAdmin(loggedIn));
+      setUser(foundUser);
+      console.log(setUser(loggedIn));
     } else {
-      loginAdmin();
+      loginUser();
     }
   }, []);
   //utloggning
   const handleLogout = () => {
-    setAdmin({});
-    setAdminName("");
-    setAdminPass("");
+    setUser({});
+    setUserName("");
+    setUserPass("");
     localStorage.clear();
     window.alert("Utloggad");
     //ladda om sidan
     window.location.reload(false);
   };
 
-  const loginAdmin = async (e) => {
+  const loginUser = async (e) => {
     e.preventDefault();
-    const admin = { adminName, adminPass };
+    const user = { userName, userPass };
     //detta är kanske inte den bästa lösningen för inlogg då det syns i konsolen...
     fetch(
       EndPoints.API_URL +
-        "Admins/login?adminName=" +
-        admin.adminName +
-        "&adminPass=" +
-        admin.adminPass,
+        "Users/login?userName=" +
+        user.userName +
+        "&userPass=" +
+        user.userPass,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Response: "response",
         },
-        body: JSON.stringify(admin),
+        body: JSON.stringify(user),
       }
     ).then((response) => {
       //skriv ut olika svar
@@ -56,8 +56,8 @@ function Login() {
         console.log("inloggad");
         setMessage("Inloggad!");
         //spara till localStorage
-        setAdmin(admin.adminName);
-        localStorage.setItem("admin", JSON.stringify(admin.adminName));
+        setUser(user.userName);
+        localStorage.setItem("user", JSON.stringify(user.userName));
       }
       if (response.status === 404) {
         console.log("fel");
@@ -65,18 +65,12 @@ function Login() {
       }
     });
   };
-  //om admin redan är inloggad
-  if (admin) {
+  // Om användaren är inloggad visas denna för att logga ut
+  if (user) {
     return (
       <div className="App">
         <div className="text-center text-lg-start mt-4 pt-2">
-          <h3>Inloggad som administratör: {admin}</h3>
-          <p>
-            {" "}
-            Som administratör kan du lägga till nya böcker, kategorier,
-            författare och användare. En boks omslag läggs till som URL med
-            exempelvis postimages.org
-          </p>
+          <h3>Inloggad som: {user}</h3>
           <button className="btn btn-primary btn-lg" onClick={handleLogout}>
             Logga ut
           </button>
@@ -92,16 +86,16 @@ function Login() {
         <p>{message}</p>
         <p></p>
         <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-          <form onSubmit={loginAdmin}>
+          <form onSubmit={loginUser}>
             <div className="input-group mb-3">
-              <label className="input-group-text">Admin:</label>
+              <label className="input-group-text">Användare:</label>
               <input
                 type="text"
                 name=""
                 id=""
                 className="form-control"
-                value={adminName}
-                onChange={(e) => setAdminName(e.target.value)}
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
               ></input>
             </div>
             <div className="input-group mb-3">
@@ -109,14 +103,21 @@ function Login() {
               <input
                 type="password"
                 className="form-control"
-                value={adminPass}
-                onChange={(e) => setAdminPass(e.target.value)}
+                value={userPass}
+                onChange={(e) => setUserPass(e.target.value)}
               ></input>
             </div>
             <div className="text-center text-lg-start mt-4 pt-2">
               <button className="btn btn-primary btn-lg">Logga in</button>
             </div>
           </form>
+          <div>
+            <hr></hr>
+            <p>
+              Inget konto?{" "}
+              <Link to={"/registerUser"}> Registrera dig här!</Link>{" "}
+            </p>
+          </div>
         </div>
       </div>
       <Footer />
@@ -124,4 +125,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginUser;

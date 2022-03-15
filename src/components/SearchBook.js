@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { EndPoints } from "./EndPoints";
-
+import { Footer } from "./Footer";
 export class SearchBook extends Component {
   constructor(props) {
     super(props);
@@ -76,14 +76,22 @@ export class SearchBook extends Component {
               <dd className="col-sm-10">{bok.category}</dd>
               <dt className="col-sm-2">Antal sidor:</dt>
               <dd className="col-sm-10">{bok.book_Pages}</dd>
+              <dt className="col-sm-2">Betyg:</dt>
+              <dd className="col-sm-10">{bok.book_Rating}/5</dd>
               <dt className="col-sm-2">Omslag:</dt>
-              <dd className="col-sm-10">{bok.book_ImageUrl}</dd>
+              <dd className="col-sm-10">
+                <img
+                  className="img-thumbnail img-responsive "
+                  src={bok.book_ImageUrl}
+                  alt={bok.Book_ImageUrl}
+                ></img>
+              </dd>
             </dl>
 
             <h4>Utlåning</h4>
             {/*visa bara utlåning om boken är utlånad */}
             {bok.book_Rented === true ? (
-              <dl className="row bg-light">
+              <dl className="row dl-striped bg-light">
                 <dt className="col-sm-2">Utlånad?</dt>
                 <dd className="col-sm-10">
                   <input
@@ -109,8 +117,10 @@ export class SearchBook extends Component {
             ) : (
               <p>Ej utlånad</p>
             )}
+            <hr></hr>
           </div>
         ))}
+        <Footer />
       </div>
     );
   }

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { EndPoints } from "./EndPoints";
+import { Footer } from "./Footer";
 //useParams(hooks) fungerar ej med class, så får bli en funktion
 function DetailPage() {
   const { book_id } = useParams();
@@ -34,15 +35,24 @@ function DetailPage() {
       <h3>Detaljer</h3>
       <div className="container">
         <h4> {book.book_Title}</h4>
-        <dl className="row">
+        <dl className="row bg-light">
           <dt className="col-sm-2">Författare:</dt>
           <dd className="col-sm-10">{book.author}</dd>
           <dt className="col-sm-2">Kategori:</dt>
           <dd className="col-sm-10">{book.category}</dd>
           <dt className="col-sm-2">Antal sidor:</dt>
           <dd className="col-sm-10">{book.book_Pages}</dd>
+          <dt className="col-sm-2">Betyg:</dt>
+          <dd className="col-sm-10">{book.book_Rating}/5</dd>
           <dt className="col-sm-2">Omslag:</dt>
-          <dd className="col-sm-10">{book.book_ImageUrl}</dd>
+          <dd className="col-sm-10">
+            {" "}
+            <img
+              className="img-thumbnail img-responsive "
+              src={book.book_ImageUrl}
+              alt={book.Book_ImageUrl}
+            ></img>{" "}
+          </dd>
         </dl>
         <h4>Utlåning</h4>
         {/*visa bara utlåning om boken är utlånad */}
@@ -74,6 +84,7 @@ function DetailPage() {
           <p> Ej utlånad</p>
         )}
       </div>
+      <Footer />
     </div>
   );
 }

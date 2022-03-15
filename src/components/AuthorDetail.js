@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { EndPoints } from "./EndPoints";
+import { Footer } from "./Footer";
 //useParams(hooks) fungerar ej med class, så får bli en funktion
 function AuthorDetail() {
   const { author_id } = useParams();
@@ -52,6 +53,7 @@ function AuthorDetail() {
           </dd>
         </dl>
       </div>
+      <Footer />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Category } from "./Category";
 import { Link } from "react-router-dom";
-
+import { Footer } from "./Footer";
 import { EndPoints } from "./EndPoints";
 export class Author extends Component {
   //constructor
@@ -166,7 +166,7 @@ export class Author extends Component {
           <thead>
             <tr>
               <th>Författare</th>
-              <th>Detaljer</th>
+
               <th>Alternativ</th>
             </tr>
           </thead>
@@ -183,8 +183,7 @@ export class Author extends Component {
                       Detajer
                     </Link>
                   </button>
-                </td>
-                <td>
+
                   {admin != null ? (
                     <button
                       type="button"
@@ -234,7 +233,7 @@ export class Author extends Component {
 
               <div className="modal-body">
                 <div className="input-group mb-3">
-                  <span className="input-group-text"> Författare </span>
+                  <label className="input-group-text"> Författare </label>
                   <input
                     type="text"
                     className="form-control"
@@ -265,6 +264,7 @@ export class Author extends Component {
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     );
   }
