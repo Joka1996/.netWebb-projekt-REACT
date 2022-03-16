@@ -525,10 +525,11 @@ export class Book extends Component {
 
                 {loggedInUser != null ? null : (
                   <div className="input-group mb-3">
-                    <label className="input-group-text">Bild</label>
+                    <label className="input-group-text">Omslag</label>
                     <input
-                      type="text"
+                      type="url"
                       className="form-control"
+                      placeholder="Bokens omslag som URL"
                       value={book_ImageUrl}
                       onChange={this.changeBook_ImageUrl}
                     ></input>
