@@ -40,9 +40,8 @@ function CategoryDetail() {
 
   return (
     <div className="App">
-      <h3>{category.category_Name}</h3>
+      <h2>{category.category_Name}</h2>
       <div className="container">
-        <h4> </h4>
         <dl className="row ">
           <dt className="col-sm-2">Böcker:</dt>
           <dd className="col-sm-10">

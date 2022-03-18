@@ -36,7 +36,7 @@ function UserPage() {
 
   return (
     <div className="App">
-      <h3>{user}</h3>
+      <h2>{user}</h2>
       <div className="container">
         <dl className="row bg-light">
           <dt className="col-sm-2">Lånade böcker:</dt>

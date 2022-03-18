@@ -326,7 +326,7 @@ export class Book extends Component {
           </button>
         ) : null}
 
-        <h3 className="d-flex justify-content-center m-3">Våra böcker</h3>
+        <h2 className="d-flex justify-content-center m-3">Våra böcker</h2>
         <table className="table table-striped">
           <thead>
             <tr>
@@ -348,13 +348,15 @@ export class Book extends Component {
                     <input
                       type="checkbox"
                       checked="checked"
-                      disabled
+                      disabled="true"
                       aria-disabled="true"
                     ></input>
                   </td>
                 ) : (
                   <td>
                     <input
+                      title="Är boken utlånad?"
+                      name="utlånad?"
                       type="checkbox"
                       checked=""
                       disabled
@@ -426,7 +428,7 @@ export class Book extends Component {
           <div className="modal-dialog modal-lg modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title">{modalTitle}</h5>
+                <p className="modal-title fs-4">{modalTitle}</p>
                 <br />
 
                 <button
@@ -437,9 +439,9 @@ export class Book extends Component {
                 ></button>
               </div>
               <div className="modal-body" aria-label="Skapa bok-formulär">
-                <h5 className="success" aria-label="alert">
+                <p className="success" aria-label="alert">
                   {message}
-                </h5>
+                </p>
                 {loggedInUser != null ? null : (
                   <div className="input-group mb-3">
                     <label className="input-group-text">Titel</label>

@@ -35,9 +35,9 @@ function AuthorDetail() {
 
   return (
     <div className="App">
-      <h3>Detaljer</h3>
+      <h2>Detaljer</h2>
       <div className="container">
-        <h4> {author.author_Name}</h4>
+        <h3> {author.author_Name}</h3>
         <dl className="row">
           <dt className="col-sm-2">Författare:</dt>
           <dd className="col-sm-10">{author.author_Name}</dd>

@@ -42,7 +42,7 @@ export class SearchBook extends Component {
     console.log(search);
     return (
       <div className="App container">
-        <h3>Sök efter bok på titel</h3>
+        <h2>Sök efter bok på titel</h2>
         <div className="input-group">
           <input
             type="search"
@@ -64,7 +64,7 @@ export class SearchBook extends Component {
           </button>
         </div>
         <p>OBS: Sök-funktionen är känslig för stor/liten bokstav</p>
-        <h4>Resultat</h4>
+        <h3>Resultat</h3>
         {book.map((bok) => (
           <div>
             <dl className="row dl-striped bg-light">
@@ -88,7 +88,7 @@ export class SearchBook extends Component {
               </dd>
             </dl>
 
-            <h4>Utlåning</h4>
+            <h3>Utlåning</h3>
             {/*visa bara utlåning om boken är utlånad */}
             {bok.book_Rented === true ? (
               <dl className="row dl-striped bg-light">

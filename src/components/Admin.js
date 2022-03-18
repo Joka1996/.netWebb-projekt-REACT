@@ -70,7 +70,7 @@ function Login() {
     return (
       <div className="App">
         <div className="text-center text-lg-start mt-4 pt-2">
-          <h3>Inloggad som administratör: {admin}</h3>
+          <h2>Inloggad som administratör: {admin}</h2>
           <p>
             {" "}
             Som administratör kan du lägga till nya böcker, kategorier,
@@ -88,7 +88,7 @@ function Login() {
   return (
     <div className="App">
       <div>
-        <h3>Inloggning</h3>
+        <h2>Inloggning</h2>
         <p>{message}</p>
         <p></p>
         <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">

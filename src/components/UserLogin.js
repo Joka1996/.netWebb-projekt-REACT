@@ -58,6 +58,8 @@ function LoginUser() {
         //spara till localStorage
         setUser(user.userName);
         localStorage.setItem("user", JSON.stringify(user.userName));
+        //ladda om sidan så att logga in -> logga ut och att profil-sidan dyker upp.
+        window.location.reload(false);
       }
       if (response.status === 404) {
         console.log("fel");
@@ -70,7 +72,7 @@ function LoginUser() {
     return (
       <div className="App">
         <div className="text-center text-lg-start mt-4 pt-2">
-          <h3>Inloggad som: {user}</h3>
+          <h2>Inloggad som: {user}</h2>
           <button className="btn btn-primary btn-lg" onClick={handleLogout}>
             Logga ut
           </button>
@@ -82,7 +84,7 @@ function LoginUser() {
   return (
     <div className="App">
       <div>
-        <h3>Inloggning</h3>
+        <h2>Inloggning</h2>
         <p>{message}</p>
         <p></p>
         <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">

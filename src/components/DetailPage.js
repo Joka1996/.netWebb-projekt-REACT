@@ -32,9 +32,9 @@ function DetailPage() {
 
   return (
     <div className="App">
-      <h3>Detaljer</h3>
+      <h2>Detaljer</h2>
       <div className="container">
-        <h4> {book.book_Title}</h4>
+        <h3> {book.book_Title}</h3>
         <dl className="row bg-light">
           <dt className="col-sm-2">Författare:</dt>
           <dd className="col-sm-10">{book.author}</dd>

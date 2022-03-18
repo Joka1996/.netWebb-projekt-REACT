@@ -181,7 +181,7 @@ export class Category extends Component {
           </button>
         ) : null}
 
-        <h3 className="d-flex justify-content-center m-3">Kategorier</h3>
+        <h2 className="d-flex justify-content-center m-3">Kategorier</h2>
         <table className="table table-striped">
           <thead>
             <tr>
@@ -245,7 +245,7 @@ export class Category extends Component {
           <div className="modal-dialog modal-lg modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title">{modalTitle}</h5>
+                <p className="modal-title fs-5">{modalTitle}</p>
                 <button
                   type="button"
                   className="btn-close"

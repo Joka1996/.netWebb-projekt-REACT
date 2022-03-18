@@ -51,11 +51,11 @@ function App() {
   return (
     <div className="App container">
       <header>
-        <h3 className="d-flex justify-content-start m-3">Bibblan</h3>
+        <h1 className="d-flex justify-content-start m-3">Bibblan</h1>
         {user != null ? (
-          <h5 className="d-flex justify-content-start m-3">
+          <p className="d-flex justify-content-start m-3 fs-5">
             Inloggad som: {user}
-          </h5>
+          </p>
         ) : null}
         <Router>
           <nav className="navbar-nav bg-light">
