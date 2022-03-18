@@ -169,124 +169,126 @@ export class Category extends Component {
     } = this.state;
     return (
       <div>
-        {admin != null ? (
-          <button
-            type="button"
-            className="btn btn-success m-2 float-end"
-            data-bs-toggle="modal"
-            data-bs-target="#modalCategory"
-            onClick={() => this.addClick()}
-          >
-            Lägg till en ny kategori
-          </button>
-        ) : null}
+        <main>
+          {admin != null ? (
+            <button
+              type="button"
+              className="btn btn-success m-2 float-end"
+              data-bs-toggle="modal"
+              data-bs-target="#modalCategory"
+              onClick={() => this.addClick()}
+            >
+              Lägg till en ny kategori
+            </button>
+          ) : null}
 
-        <h2 className="d-flex justify-content-center m-3">Kategorier</h2>
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>Kategori</th>
-              <th>Alternativ</th>
-            </tr>
-          </thead>
-          <tbody>
-            {categories.map((cat) => (
-              <tr key={cat.categoryId}>
-                <td>{cat.category_Name}</td>
-                <td>
-                  <button className="btn btn-info mr-1 btn-sm">
-                    <Link
-                      className="link-dark"
-                      to={`/categorydetail/${cat.categoryId}`}
-                    >
-                      Detajer
-                    </Link>
-                  </button>
-
-                  {admin != null ? (
-                    <button
-                      type="button"
-                      className="btn btn-warning mr-1 btn-sm"
-                      data-bs-toggle="modal"
-                      data-bs-target="#modalCategory"
-                      onClick={() => this.editClick(cat)}
-                    >
-                      {" "}
-                      Uppdatera
+          <h2 className="d-flex justify-content-center m-3">Kategorier</h2>
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th>Kategori</th>
+                <th>Alternativ</th>
+              </tr>
+            </thead>
+            <tbody>
+              {categories.map((cat) => (
+                <tr key={cat.categoryId}>
+                  <td>{cat.category_Name}</td>
+                  <td>
+                    <button className="btn btn-info mr-1 btn-sm">
+                      <Link
+                        className="link-dark"
+                        to={`/categorydetail/${cat.categoryId}`}
+                      >
+                        Detajer
+                      </Link>
                     </button>
-                  ) : (
-                    <p>Admin</p>
-                  )}
-                  {admin != null ? (
+
+                    {admin != null ? (
+                      <button
+                        type="button"
+                        className="btn btn-warning mr-1 btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalCategory"
+                        onClick={() => this.editClick(cat)}
+                      >
+                        {" "}
+                        Uppdatera
+                      </button>
+                    ) : (
+                      <p>Admin</p>
+                    )}
+                    {admin != null ? (
+                      <button
+                        type="button"
+                        className="btn btn-danger mr-1 btn-sm"
+                        onClick={() => this.deleteClick(cat.categoryId)}
+                      >
+                        {" "}
+                        Radera
+                      </button>
+                    ) : null}
+
+                    {/**skicka med cat (category) så att man kan plocka ut rätt id i funktionen editClick */}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {/*bootstrap modle-window*/}
+          <div
+            className="modal fade"
+            id="modalCategory"
+            tabIndex="-1"
+            aria-hidden="true"
+            role="dialog"
+          >
+            <div className="modal-dialog modal-lg modal-dialog-centered">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <p className="modal-title fs-5">{modalTitle}</p>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div className="modal-body">
+                  <p className="success">{message}</p>
+                  <div className="input-group mb-3">
+                    <label className="input-group-text">Kategori</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={category_Name}
+                      onChange={this.changeCategory_Name}
+                    ></input>
+                  </div>
+
+                  {categoryId === 0 ? (
                     <button
                       type="button"
-                      className="btn btn-danger mr-1 btn-sm"
-                      onClick={() => this.deleteClick(cat.categoryId)}
+                      className="btn btn-success float-start"
+                      onClick={() => this.createClick()}
                     >
-                      {" "}
-                      Radera
+                      Skapa
                     </button>
                   ) : null}
-
-                  {/**skicka med cat (category) så att man kan plocka ut rätt id i funktionen editClick */}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {/*bootstrap modle-window*/}
-        <div
-          className="modal fade"
-          id="modalCategory"
-          tabIndex="-1"
-          aria-hidden="true"
-          role="dialog"
-        >
-          <div className="modal-dialog modal-lg modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <p className="modal-title fs-5">{modalTitle}</p>
-                <button
-                  type="button"
-                  className="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div className="modal-body">
-                <p className="success">{message}</p>
-                <div className="input-group mb-3">
-                  <label className="input-group-text">Kategori</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={category_Name}
-                    onChange={this.changeCategory_Name}
-                  ></input>
+                  {categoryId !== 0 ? (
+                    <button
+                      type="button"
+                      className="btn btn-warning float-start"
+                      onClick={() => this.updateClick(categoryId)}
+                    >
+                      Uppdatera
+                    </button>
+                  ) : null}
                 </div>
-
-                {categoryId === 0 ? (
-                  <button
-                    type="button"
-                    className="btn btn-success float-start"
-                    onClick={() => this.createClick()}
-                  >
-                    Skapa
-                  </button>
-                ) : null}
-                {categoryId !== 0 ? (
-                  <button
-                    type="button"
-                    className="btn btn-warning float-start"
-                    onClick={() => this.updateClick(categoryId)}
-                  >
-                    Uppdatera
-                  </button>
-                ) : null}
               </div>
             </div>
           </div>
-        </div>
+        </main>
         <Footer />
       </div>
     );

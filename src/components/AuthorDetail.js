@@ -35,24 +35,26 @@ function AuthorDetail() {
 
   return (
     <div className="App">
-      <h2>Detaljer</h2>
-      <div className="container">
-        <h3> {author.author_Name}</h3>
-        <dl className="row">
-          <dt className="col-sm-2">Författare:</dt>
-          <dd className="col-sm-10">{author.author_Name}</dd>
-          <dt className="col-sm-2">Skrivna böcker:</dt>
-          <dd className="col-sm-10">
-            <ul className="list-group">
-              {books.map((bok) => (
-                <li className="list-group-item" key={bok.book_Title}>
-                  {bok.book_Title}{" "}
-                </li>
-              ))}
-            </ul>
-          </dd>
-        </dl>
-      </div>
+      <main>
+        <h2>Detaljer</h2>
+        <div className="container">
+          <h3> {author.author_Name}</h3>
+          <dl className="row">
+            <dt className="col-sm-2">Författare:</dt>
+            <dd className="col-sm-10">{author.author_Name}</dd>
+            <dt className="col-sm-2">Skrivna böcker:</dt>
+            <dd className="col-sm-10">
+              <ul className="list-group">
+                {books.map((bok) => (
+                  <li className="list-group-item" key={bok.book_Title}>
+                    {bok.book_Title}{" "}
+                  </li>
+                ))}
+              </ul>
+            </dd>
+          </dl>
+        </div>
+      </main>
       <Footer />
     </div>
   );

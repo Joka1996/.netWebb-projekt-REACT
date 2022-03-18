@@ -54,47 +54,49 @@ export class RegisterUser extends Component {
     const { user_Name, user_Password, user } = this.state;
     return (
       <div className="App">
-        <div>
-          <h3>Registrera</h3>
-          <div
-            className="col-md-8 col-lg-6 col-xl-4 offset-xl-1"
-            aria-label="Registrera konto"
-          >
-            <div className="input-group mb-3">
-              <label className="input-group-text" aria-label="Användarnamn">
-                Användarnamn:
-              </label>
-              <input
-                type="text"
-                value={user_Name}
-                onChange={this.changeUser_Name}
-                className="form-control"
-              ></input>
+        <main>
+          <div>
+            <h3>Registrera</h3>
+            <div
+              className="col-md-8 col-lg-6 col-xl-4 offset-xl-1"
+              aria-label="Registrera konto"
+            >
+              <div className="input-group mb-3">
+                <label className="input-group-text" aria-label="Användarnamn">
+                  Användarnamn:
+                </label>
+                <input
+                  type="text"
+                  value={user_Name}
+                  onChange={this.changeUser_Name}
+                  className="form-control"
+                ></input>
+              </div>
+              <div className="input-group mb-3">
+                <label className="input-group-text" aria-label="Lösenord">
+                  Lösenord:
+                </label>
+                <input
+                  type="password"
+                  className="form-control"
+                  value={user_Password}
+                  onChange={this.changeUser_Password}
+                ></input>
+              </div>
+              <div className="text-center text-lg-start mt-4 pt-2">
+                <button
+                  className="btn btn-success btn-lg"
+                  aria-label="Skapa"
+                  type="button"
+                  onClick={() => this.createClick()}
+                >
+                  Skapa
+                </button>
+              </div>
+              <div></div>
             </div>
-            <div className="input-group mb-3">
-              <label className="input-group-text" aria-label="Lösenord">
-                Lösenord:
-              </label>
-              <input
-                type="password"
-                className="form-control"
-                value={user_Password}
-                onChange={this.changeUser_Password}
-              ></input>
-            </div>
-            <div className="text-center text-lg-start mt-4 pt-2">
-              <button
-                className="btn btn-success btn-lg"
-                aria-label="Skapa"
-                type="button"
-                onClick={() => this.createClick()}
-              >
-                Skapa
-              </button>
-            </div>
-            <div></div>
           </div>
-        </div>
+        </main>
         <Footer />
       </div>
     );

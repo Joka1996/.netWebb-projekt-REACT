@@ -154,122 +154,124 @@ export class Author extends Component {
       this.state;
     return (
       <div>
-        {admin != null ? (
-          <button
-            type="button"
-            className="btn btn-success m-2 float-end"
-            data-bs-toggle="modal"
-            data-bs-target="#modalAuthor"
-            onClick={() => this.addClick()}
+        <main>
+          {admin != null ? (
+            <button
+              type="button"
+              className="btn btn-success m-2 float-end"
+              data-bs-toggle="modal"
+              data-bs-target="#modalAuthor"
+              onClick={() => this.addClick()}
+            >
+              Lägg till ny författare
+            </button>
+          ) : null}
+
+          <h2 className="d-flex justify-content-center m-3">Författare</h2>
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th>Författare</th>
+
+                <th>Alternativ</th>
+              </tr>
+            </thead>
+            <tbody>
+              {authors.map((aut) => (
+                <tr key={aut.authorId}>
+                  <td>{aut.author_Name}</td>
+                  <td>
+                    <button className="btn btn-info mr-1 btn-sm">
+                      <Link
+                        className="link-dark"
+                        to={`/authordetail/${aut.authorId}`}
+                      >
+                        Detajer
+                      </Link>
+                    </button>
+
+                    {admin != null ? (
+                      <button
+                        type="button"
+                        className="btn btn-warning mr-1 btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalAuthor"
+                        onClick={() => this.editClick(aut)}
+                      >
+                        Uppdatera
+                      </button>
+                    ) : (
+                      <p>Admin</p>
+                    )}
+                    {admin != null ? (
+                      <button
+                        type="button"
+                        className="btn btn-danger mr-1 btn-sm"
+                        onClick={() => this.deleteClick(aut.authorId)}
+                      >
+                        Radera
+                      </button>
+                    ) : null}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {/**modal window.. igen */}
+          <div
+            className="modal fade"
+            id="modalAuthor"
+            tabIndex="-1"
+            aria-hidden="true"
+            role="dialog"
           >
-            Lägg till ny författare
-          </button>
-        ) : null}
+            <div className="modal-dialog modal-lg modal-dialog-centered">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <p className="modal-title fs-5">{modalTitle}</p>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
 
-        <h2 className="d-flex justify-content-center m-3">Författare</h2>
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>Författare</th>
+                <div className="modal-body">
+                  <p className="success">{message}</p>
+                  <div className="input-group mb-3">
+                    <label className="input-group-text"> Författare </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={author_Name}
+                      onChange={this.changeAuthor_Name}
+                    ></input>
+                  </div>
 
-              <th>Alternativ</th>
-            </tr>
-          </thead>
-          <tbody>
-            {authors.map((aut) => (
-              <tr key={aut.authorId}>
-                <td>{aut.author_Name}</td>
-                <td>
-                  <button className="btn btn-info mr-1 btn-sm">
-                    <Link
-                      className="link-dark"
-                      to={`/authordetail/${aut.authorId}`}
-                    >
-                      Detajer
-                    </Link>
-                  </button>
-
-                  {admin != null ? (
+                  {authorId === 0 ? (
                     <button
                       type="button"
-                      className="btn btn-warning mr-1 btn-sm"
-                      data-bs-toggle="modal"
-                      data-bs-target="#modalAuthor"
-                      onClick={() => this.editClick(aut)}
+                      className="btn btn-success float-start"
+                      onClick={() => this.createClick()}
+                    >
+                      Skapa
+                    </button>
+                  ) : null}
+                  {authorId !== 0 ? (
+                    <button
+                      type="button"
+                      className="btn btn-warning float-start"
+                      onClick={() => this.updateClick(authorId)}
                     >
                       Uppdatera
                     </button>
-                  ) : (
-                    <p>Admin</p>
-                  )}
-                  {admin != null ? (
-                    <button
-                      type="button"
-                      className="btn btn-danger mr-1 btn-sm"
-                      onClick={() => this.deleteClick(aut.authorId)}
-                    >
-                      Radera
-                    </button>
                   ) : null}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {/**modal window.. igen */}
-        <div
-          className="modal fade"
-          id="modalAuthor"
-          tabIndex="-1"
-          aria-hidden="true"
-          role="dialog"
-        >
-          <div className="modal-dialog modal-lg modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <p className="modal-title fs-5">{modalTitle}</p>
-                <button
-                  type="button"
-                  className="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-
-              <div className="modal-body">
-                <p className="success">{message}</p>
-                <div className="input-group mb-3">
-                  <label className="input-group-text"> Författare </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={author_Name}
-                    onChange={this.changeAuthor_Name}
-                  ></input>
                 </div>
-
-                {authorId === 0 ? (
-                  <button
-                    type="button"
-                    className="btn btn-success float-start"
-                    onClick={() => this.createClick()}
-                  >
-                    Skapa
-                  </button>
-                ) : null}
-                {authorId !== 0 ? (
-                  <button
-                    type="button"
-                    className="btn btn-warning float-start"
-                    onClick={() => this.updateClick(authorId)}
-                  >
-                    Uppdatera
-                  </button>
-                ) : null}
               </div>
             </div>
           </div>
-        </div>
+        </main>
         <Footer />
       </div>
     );

@@ -32,58 +32,60 @@ function DetailPage() {
 
   return (
     <div className="App">
-      <h2>Detaljer</h2>
-      <div className="container">
-        <h3> {book.book_Title}</h3>
-        <dl className="row bg-light">
-          <dt className="col-sm-2">Författare:</dt>
-          <dd className="col-sm-10">{book.author}</dd>
-          <dt className="col-sm-2">Kategori:</dt>
-          <dd className="col-sm-10">{book.category}</dd>
-          <dt className="col-sm-2">Antal sidor:</dt>
-          <dd className="col-sm-10">{book.book_Pages}</dd>
-          <dt className="col-sm-2">Betyg:</dt>
-          <dd className="col-sm-10">{book.book_Rating}/5</dd>
-          <dt className="col-sm-2">Omslag:</dt>
-          <dd className="col-sm-10">
-            {" "}
-            <img
-              className="img-thumbnail img-responsive "
-              src={book.book_ImageUrl}
-              alt={book.Book_ImageUrl}
-            ></img>{" "}
-          </dd>
-        </dl>
-        <h4>Utlåning</h4>
-        {/*visa bara utlåning om boken är utlånad */}
-        {book.book_Rented === true ? (
-          <dl className="row">
-            <dt className="col-sm-2">Utlånad?</dt>
+      <main>
+        <h2>Detaljer</h2>
+        <div className="container">
+          <h3> {book.book_Title}</h3>
+          <dl className="row bg-light">
+            <dt className="col-sm-2">Författare:</dt>
+            <dd className="col-sm-10">{book.author}</dd>
+            <dt className="col-sm-2">Kategori:</dt>
+            <dd className="col-sm-10">{book.category}</dd>
+            <dt className="col-sm-2">Antal sidor:</dt>
+            <dd className="col-sm-10">{book.book_Pages}</dd>
+            <dt className="col-sm-2">Betyg:</dt>
+            <dd className="col-sm-10">{book.book_Rating}/5</dd>
+            <dt className="col-sm-2">Omslag:</dt>
             <dd className="col-sm-10">
-              <input
-                className="checkbox"
-                disabled="disabled"
-                aria-disabled
-                type="checkbox"
-                checked="checked"
-              ></input>
+              {" "}
+              <img
+                className="img-thumbnail img-responsive "
+                src={book.book_ImageUrl}
+                alt={book.Book_ImageUrl}
+              ></img>{" "}
             </dd>
-            <dt className="col-sm-2">Datum för utlåning:</dt>
-            <dd className="col-sm-10">{book.book_TimeRented}</dd>
-            <dt className="col-sm-2">Lånad av:</dt>
-            {admin != null ? (
-              <dd className="col-sm-10">{book.user}</dd>
-            ) : (
-              <dd className="col-sm-10">
-                {" "}
-                <b>Endast admin kan se vem som lånat böcker</b>
-              </dd>
-            )}
           </dl>
-        ) : (
-          <p> Ej utlånad</p>
-        )}
-      </div>
+          <h4>Utlåning</h4>
+          {/*visa bara utlåning om boken är utlånad */}
+          {book.book_Rented === true ? (
+            <dl className="row">
+              <dt className="col-sm-2">Utlånad?</dt>
+              <dd className="col-sm-10">
+                <input
+                  className="checkbox"
+                  disabled="disabled"
+                  aria-disabled
+                  type="checkbox"
+                  checked="checked"
+                ></input>
+              </dd>
+              <dt className="col-sm-2">Datum för utlåning:</dt>
+              <dd className="col-sm-10">{book.book_TimeRented}</dd>
+              <dt className="col-sm-2">Lånad av:</dt>
+              {admin != null ? (
+                <dd className="col-sm-10">{book.user}</dd>
+              ) : (
+                <dd className="col-sm-10">
+                  {" "}
+                  <b>Endast admin kan se vem som lånat böcker</b>
+                </dd>
+              )}
+            </dl>
+          ) : (
+            <p> Ej utlånad</p>
+          )}
+        </div>
+      </main>
       <Footer />
     </div>
   );

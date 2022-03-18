@@ -36,23 +36,25 @@ function UserPage() {
 
   return (
     <div className="App">
-      <h2>{user}</h2>
-      <div className="container">
-        <dl className="row bg-light">
-          <dt className="col-sm-2">Lånade böcker:</dt>
-          {book.map((bok) =>
-            bok.length > 0 ? (
-              <dd className="col-sm-10" key={bok.book_Title}>
-                Ingen bok lånad
-              </dd>
-            ) : (
-              <dd className="col-sm-10" key={bok.book_Title}>
-                {bok.book_Title}
-              </dd>
-            )
-          )}
-        </dl>
-      </div>
+      <main>
+        <h2>{user}</h2>
+        <div className="container">
+          <dl className="row bg-light">
+            <dt className="col-sm-2">Lånade böcker:</dt>
+            {book.map((bok) =>
+              bok.length > 0 ? (
+                <dd className="col-sm-10" key={bok.book_Title}>
+                  Ingen bok lånad
+                </dd>
+              ) : (
+                <dd className="col-sm-10" key={bok.book_Title}>
+                  {bok.book_Title}
+                </dd>
+              )
+            )}
+          </dl>
+        </div>
+      </main>
       <Footer />
     </div>
   );

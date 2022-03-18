@@ -71,57 +71,61 @@ function LoginUser() {
   if (user) {
     return (
       <div className="App">
-        <div className="text-center text-lg-start mt-4 pt-2">
-          <h2>Inloggad som: {user}</h2>
-          <button className="btn btn-primary btn-lg" onClick={handleLogout}>
-            Logga ut
-          </button>
-        </div>
+        <main>
+          <div className="text-center text-lg-start mt-4 pt-2">
+            <h2>Inloggad som: {user}</h2>
+            <button className="btn btn-primary btn-lg" onClick={handleLogout}>
+              Logga ut
+            </button>
+          </div>
+        </main>
         <Footer />
       </div>
     );
   }
   return (
     <div className="App">
-      <div>
-        <h2>Inloggning</h2>
-        <p>{message}</p>
-        <p></p>
-        <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-          <form onSubmit={loginUser}>
-            <div className="input-group mb-3">
-              <label className="input-group-text">Användare:</label>
-              <input
-                type="text"
-                name=""
-                id=""
-                className="form-control"
-                value={userName}
-                onChange={(e) => setUserName(e.target.value)}
-              ></input>
+      <main>
+        <div>
+          <h2>Inloggning</h2>
+          <p>{message}</p>
+          <p></p>
+          <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+            <form onSubmit={loginUser}>
+              <div className="input-group mb-3">
+                <label className="input-group-text">Användare:</label>
+                <input
+                  type="text"
+                  name=""
+                  id=""
+                  className="form-control"
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                ></input>
+              </div>
+              <div className="input-group mb-3">
+                <label className="input-group-text">Lösenord:</label>
+                <input
+                  type="password"
+                  className="form-control"
+                  value={userPass}
+                  onChange={(e) => setUserPass(e.target.value)}
+                ></input>
+              </div>
+              <div className="text-center text-lg-start mt-4 pt-2">
+                <button className="btn btn-primary btn-lg">Logga in</button>
+              </div>
+            </form>
+            <div>
+              <hr></hr>
+              <p>
+                Inget konto?{" "}
+                <Link to={"/registerUser"}> Registrera dig här!</Link>{" "}
+              </p>
             </div>
-            <div className="input-group mb-3">
-              <label className="input-group-text">Lösenord:</label>
-              <input
-                type="password"
-                className="form-control"
-                value={userPass}
-                onChange={(e) => setUserPass(e.target.value)}
-              ></input>
-            </div>
-            <div className="text-center text-lg-start mt-4 pt-2">
-              <button className="btn btn-primary btn-lg">Logga in</button>
-            </div>
-          </form>
-          <div>
-            <hr></hr>
-            <p>
-              Inget konto?{" "}
-              <Link to={"/registerUser"}> Registrera dig här!</Link>{" "}
-            </p>
           </div>
         </div>
-      </div>
+      </main>
       <Footer />
     </div>
   );

@@ -159,115 +159,125 @@ export class User extends Component {
     } = this.state;
     return (
       <div>
-        {admin != null ? (
-          <button
-            type="button"
-            className="btn btn-success m-2 float-end"
-            data-bs-toggle="modal"
-            data-bs-target="#modalUser"
-            onClick={() => this.addClick()}
-          >
-            Lägg till användare
-          </button>
-        ) : null}
+        <main>
+          {admin != null ? (
+            <button
+              type="button"
+              className="btn btn-success m-2 float-end"
+              data-bs-toggle="modal"
+              data-bs-target="#modalUser"
+              onClick={() => this.addClick()}
+            >
+              Lägg till användare
+            </button>
+          ) : null}
 
-        <h3 className="d-flex justify-content-center m-3">Användare</h3>
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>Användare</th>
-              <th>Alternativ</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((usr) => (
-              <tr key={usr.userId}>
-                <td>{usr.user_Name}</td>
-                <td>
-                  {admin != null ? (
+          <h3 className="d-flex justify-content-center m-3">Användare</h3>
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th>Användare</th>
+                <th>Alternativ</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((usr) => (
+                <tr key={usr.userId}>
+                  <td>{usr.user_Name}</td>
+                  <td>
+                    {admin != null ? (
+                      <button
+                        type="button"
+                        className="btn btn-warning mr-1 btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalUser"
+                        onClick={() => this.editClick(usr)}
+                      >
+                        Uppdatera
+                      </button>
+                    ) : (
+                      <p>Admin</p>
+                    )}
+                    {admin != null ? (
+                      <button
+                        type="button"
+                        className="btn btn-danger mr-1 btn-sm"
+                        onClick={() => this.deleteClick(usr.userId)}
+                      >
+                        Radera
+                      </button>
+                    ) : null}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {/**modaaaaaal */}
+          <div
+            className="modal fade"
+            id="modalUser"
+            tabIndex="-1"
+            role="dialog"
+          >
+            <div className="modal-dialog modal-lg modal-dialog-centered">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">{modalTitle}</h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div
+                  className="modal-body"
+                  aria-label="Skapa användare-formulär"
+                >
+                  <p className="success">{message}</p>
+                  <div className="input-group mb-3">
+                    <label className="input-group-text">Användare:</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={user_Name}
+                      onChange={this.changeUser_Name}
+                    ></input>
+                  </div>
+
+                  <div className="input-group mb-3">
+                    <label className="input-group-text">Lösenord:</label>
+                    <input
+                      type="password"
+                      className="form-control"
+                      value={user_Password}
+                      onChange={this.changeUser_Password}
+                    ></input>
+                  </div>
+
+                  {userId === 0 ? (
                     <button
                       type="button"
-                      className="btn btn-warning mr-1 btn-sm"
-                      data-bs-toggle="modal"
-                      data-bs-target="#modalUser"
-                      onClick={() => this.editClick(usr)}
+                      className="btn btn-success float-start"
+                      onClick={() => this.createClick()}
+                    >
+                      Skapa
+                    </button>
+                  ) : null}
+                  {userId !== 0 ? (
+                    <button
+                      type="button"
+                      className="btn btn-warning float-start"
+                      onClick={() => this.updateClick(userId)}
                     >
                       Uppdatera
                     </button>
-                  ) : (
-                    <p>Admin</p>
-                  )}
-                  {admin != null ? (
-                    <button
-                      type="button"
-                      className="btn btn-danger mr-1 btn-sm"
-                      onClick={() => this.deleteClick(usr.userId)}
-                    >
-                      Radera
-                    </button>
                   ) : null}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {/**modaaaaaal */}
-        <div className="modal fade" id="modalUser" tabIndex="-1" role="dialog">
-          <div className="modal-dialog modal-lg modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">{modalTitle}</h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div className="modal-body" aria-label="Skapa användare-formulär">
-                <p className="success">{message}</p>
-                <div className="input-group mb-3">
-                  <label className="input-group-text">Användare:</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={user_Name}
-                    onChange={this.changeUser_Name}
-                  ></input>
                 </div>
-
-                <div className="input-group mb-3">
-                  <label className="input-group-text">Lösenord:</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    value={user_Password}
-                    onChange={this.changeUser_Password}
-                  ></input>
-                </div>
-
-                {userId === 0 ? (
-                  <button
-                    type="button"
-                    className="btn btn-success float-start"
-                    onClick={() => this.createClick()}
-                  >
-                    Skapa
-                  </button>
-                ) : null}
-                {userId !== 0 ? (
-                  <button
-                    type="button"
-                    className="btn btn-warning float-start"
-                    onClick={() => this.updateClick(userId)}
-                  >
-                    Uppdatera
-                  </button>
-                ) : null}
               </div>
             </div>
           </div>
-        </div>
+        </main>
         <Footer />
       </div>
     );

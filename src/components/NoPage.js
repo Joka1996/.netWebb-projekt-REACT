@@ -4,7 +4,9 @@ export class NoPage extends Component {
   render() {
     return (
       <div>
-        <h3>Oops ingen sida hittad</h3>
+        <main>
+          <h3>Oops ingen sida hittad</h3>
+        </main>
         <Footer />
       </div>
     );

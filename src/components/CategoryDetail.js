@@ -40,21 +40,23 @@ function CategoryDetail() {
 
   return (
     <div className="App">
-      <h2>{category.category_Name}</h2>
-      <div className="container">
-        <dl className="row ">
-          <dt className="col-sm-2">Böcker:</dt>
-          <dd className="col-sm-10">
-            <ul className="list-group">
-              {books.map((bok) => (
-                <li className="list-group-item" key={bok.book_Title}>
-                  {bok.book_Title}
-                </li>
-              ))}
-            </ul>
-          </dd>
-        </dl>
-      </div>
+      <main>
+        <h2>{category.category_Name}</h2>
+        <div className="container">
+          <dl className="row ">
+            <dt className="col-sm-2">Böcker:</dt>
+            <dd className="col-sm-10">
+              <ul className="list-group">
+                {books.map((bok) => (
+                  <li className="list-group-item" key={bok.book_Title}>
+                    {bok.book_Title}
+                  </li>
+                ))}
+              </ul>
+            </dd>
+          </dl>
+        </div>
+      </main>
       <Footer />
     </div>
   );
