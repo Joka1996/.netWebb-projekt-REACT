@@ -58,6 +58,8 @@ function Login() {
         //spara till localStorage
         setAdmin(admin.adminName);
         localStorage.setItem("admin", JSON.stringify(admin.adminName));
+        //ladda om sidan
+        window.location.reload(false);
       }
       if (response.status === 404) {
         console.log("fel");
